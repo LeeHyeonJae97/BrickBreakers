@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Fix
 public class PoolManager : MonoBehaviour
 {
     [System.Serializable]
@@ -21,8 +22,9 @@ public class PoolManager : MonoBehaviour
             for (int i = 0; i < initAmount; i++)
             {
                 GameObject obj = Instantiate(prefab, holder);
-                obj.SetActive(false);
+                obj.name = key;
                 objs.Add(obj);
+                obj.SetActive(false);
             }
         }
 
@@ -31,17 +33,17 @@ public class PoolManager : MonoBehaviour
             for (int i = 0; i < initAmount; i++)
             {
                 GameObject obj = Instantiate(prefab, holder);
-                obj.SetActive(false);
+                obj.name = key;
                 objs.Add(obj);
+                obj.SetActive(false);
             }
         }
 
         public GameObject Get()
         {
-            if (objs.Count <= 0) Expand();
+            if (objs.Count == 0) Expand();
 
             GameObject obj = objs[0];
-            obj.name = key;
             obj.SetActive(true);
             objs.RemoveAt(0);
             return obj;
@@ -78,13 +80,12 @@ public class PoolManager : MonoBehaviour
         return poolDic[key].Get();
     }
 
-    public GameObject[] Get(string key, int amount)
+    public GameObject Get(string key, Vector2 pos)
     {
-        GameObject[] objs = new GameObject[amount];
-        for (int i = 0; i < amount; i++)
-            objs[i] = poolDic[key].Get();
+        GameObject obj = poolDic[key].Get();
+        obj.transform.position = pos;
 
-        return objs;
+        return obj;
     }
 
     public GameObject Get(string key, Transform parent)
@@ -99,10 +100,18 @@ public class PoolManager : MonoBehaviour
     {
         GameObject obj = poolDic[key].Get();
         obj.transform.position = pos;
-        obj.transform.rotation = Quaternion.identity;
         obj.transform.SetParent(parent);
 
         return obj;
+    }
+
+    public GameObject[] Get(string key, int amount)
+    {
+        GameObject[] objs = new GameObject[amount];
+        for (int i = 0; i < amount; i++)
+            objs[i] = poolDic[key].Get();
+
+        return objs;
     }
 
     public GameObject[] Get(string key, int amount, Transform parent)
@@ -131,15 +140,6 @@ public class PoolManager : MonoBehaviour
         return objs;
     }
 
-    public GameObject Get(string key, Vector2 pos)
-    {
-        GameObject obj = poolDic[key].Get();
-        obj.transform.position = pos;
-        obj.transform.rotation = Quaternion.identity;
-
-        return obj;
-    }
-
     public GameObject[] Get(string key, int amount, Vector2 pos)
     {
         GameObject[] objs = new GameObject[amount];
@@ -147,7 +147,6 @@ public class PoolManager : MonoBehaviour
         {
             GameObject obj = poolDic[key].Get();
             obj.transform.position = pos;
-            obj.transform.rotation = Quaternion.identity;
             objs[i] = obj;
         }
 
@@ -161,59 +160,6 @@ public class PoolManager : MonoBehaviour
         {
             GameObject obj = poolDic[key].Get();
             obj.transform.position = poses[i];
-            obj.transform.rotation = Quaternion.identity;
-            objs[i] = obj;
-        }
-
-        return objs;
-    }
-
-    public GameObject Get(string key, Vector2 pos, Quaternion quaternion)
-    {
-        GameObject obj = poolDic[key].Get();
-        obj.transform.position = pos;
-        obj.transform.rotation = quaternion;
-
-        return obj;
-    }
-
-    public GameObject[] Get(string key, int amount, Vector2 pos, Quaternion quaternion)
-    {
-        GameObject[] objs = new GameObject[amount];
-        for (int i = 0; i < amount; i++)
-        {
-            GameObject obj = poolDic[key].Get();
-            obj.transform.position = pos;
-            obj.transform.rotation = quaternion;
-            objs[i] = obj;
-        }
-
-        return objs;
-    }
-
-    public GameObject[] Get(string key, int amount, Vector2[] poses, Quaternion[] quaternions)
-    {
-        GameObject[] objs = new GameObject[amount];
-        for (int i = 0; i < amount; i++)
-        {
-            GameObject obj = poolDic[key].Get();
-            obj.transform.position = poses[i];
-            obj.transform.rotation = quaternions[i];
-            objs[i] = obj;
-        }
-
-        return objs;
-    }
-
-    public GameObject[] Get(string key, int amount, Transform parent, Vector2[] poses)
-    {
-        GameObject[] objs = new GameObject[amount];
-        for (int i = 0; i < amount; i++)
-        {
-            GameObject obj = poolDic[key].Get();
-            obj.transform.position = poses[i];
-            obj.transform.rotation = Quaternion.identity;
-            obj.transform.SetParent(parent);
             objs[i] = obj;
         }
 
@@ -222,15 +168,15 @@ public class PoolManager : MonoBehaviour
     #endregion
 
     #region RETURN
-    public void Return(string key, GameObject obj)
+    public void Return(GameObject obj)
     {
-        poolDic[key].Return(obj);
+        poolDic[obj.name].Return(obj);
     }
 
-    public void Return(string key, GameObject[] objs)
+    public void Return(GameObject[] objs)
     {
         for (int i = 0; i < objs.Length; i++)
-            poolDic[key].Return(objs[i]);
+            poolDic[objs[i].name].Return(objs[i]);
     }
     #endregion
 }

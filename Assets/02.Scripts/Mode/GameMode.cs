@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
 
 public class GameMode : AMode
 {
@@ -20,6 +19,7 @@ public class GameMode : AMode
     public GameObject gameOverCanvas;
     public Text winOrLoseText;
     public GameObject giveUpButton;
+    public GameObject pauseButton;
     public GameObject exitGameButton;
 
     private int level;
@@ -69,6 +69,8 @@ public class GameMode : AMode
 
     public override void SetActive(bool value)
     {
+        if (holder.activeInHierarchy == value) return;
+
         holder.SetActive(value);
 
         if (value)
@@ -77,11 +79,13 @@ public class GameMode : AMode
             if(GameManager.isSinglePlay)
             {
                 giveUpButton.SetActive(false);
+                pauseButton.SetActive(true);
                 exitGameButton.SetActive(true);
             }
             else
             {
                 giveUpButton.SetActive(true);
+                pauseButton.SetActive(false);
                 exitGameButton.SetActive(false);
             }
 

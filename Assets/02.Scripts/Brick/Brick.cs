@@ -32,6 +32,7 @@ public class Brick : MonoBehaviour
         }
     }
 
+    // Fix
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if ((GameManager.isSinglePlay || pv.IsMine) && collision.gameObject.CompareTag("Ball")) Hit();
@@ -78,10 +79,11 @@ public class Brick : MonoBehaviour
         this.state = state;
     }
 
+    // Fix
     public void Hit()
     {
         Life -= 1;
-        audioManager.PlayVfx("Hit");
+        audioManager.PlaySfx("Hit");
     }
 
     protected virtual void Destroy() => brickManager.Destroy(gameObject);
@@ -93,6 +95,7 @@ public class Brick : MonoBehaviour
         SetState(State.MOVEDOWN);
     }
 
+    // Fix
     private bool Move(Vector2 targetPos)
     {
         transform.position = Vector2.MoveTowards(transform.position, targetPos, velocity * Time.deltaTime);

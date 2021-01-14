@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Fix
 public class TitleMode : AMode
 {
     public AudioManager audioManager;
@@ -13,6 +14,8 @@ public class TitleMode : AMode
 
     public override void SetActive(bool value)
     {
+        if (holder.activeInHierarchy == value) return;
+
         holder.SetActive(value);
 
         if (value)

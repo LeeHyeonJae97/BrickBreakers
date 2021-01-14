@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
+// Fix
 public class PhotonBrickView : MonoBehaviourPun, IPunObservable
 {
     public Brick brick;

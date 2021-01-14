@@ -389,7 +389,7 @@ GameObject:
   - component: {fileID: 5252713992190936126}
   - component: {fileID: 986714889680172908}
   m_Layer: 0
-  m_Name: Brick
+  m_Name: Brick_Net
   m_TagString: Brick
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

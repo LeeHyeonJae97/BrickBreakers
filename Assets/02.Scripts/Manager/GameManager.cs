@@ -1,15 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
+// Fix
 public class GameManager : MonoBehaviour
 {
     public static bool isSinglePlay;
 
-    public ModeManager modeManager;
-
     private void Awake()
+    {
+        ScaleResolution();
+    }
+
+    private void OnPreCull()
+    {
+        GL.Clear(true, true, Color.black);
+    }
+
+    private void ScaleResolution()
     {
         Camera camera = Camera.main;
         Rect rect = camera.rect;
@@ -27,8 +35,6 @@ public class GameManager : MonoBehaviour
         }
         camera.rect = rect;
     }
-
-    void OnPreCull() => GL.Clear(true, true, Color.black);
 
     public void QuitGame() => Application.Quit();
 }

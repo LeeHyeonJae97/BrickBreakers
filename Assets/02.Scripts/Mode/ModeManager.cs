@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Fix
 public class ModeManager : MonoBehaviour
 {
     public enum BigMode { TITLE, LOBBY, GAME };
-    public enum SmallMode { NONE, CONNECTINGSERVER, INSERVER, FINDINGMATCH, READYFORGAME, READYFORSHOOT, SHOOT, NEXTLEVEL, WIN, LOSE };
+    public enum SmallMode { NONE, CONNECTINGSERVER, INSERVER, MAKINGMATCH, FINDINGMATCH, READYFORGAME, READYFORSHOOT, SHOOT, NEXTLEVEL, WIN, LOSE };
 
     public AMode titleMode;
     public AMode lobbyMode;
     public AMode gameMode;
     private Dictionary<BigMode, AMode> bigModeDic = new Dictionary<BigMode, AMode>();
+
     public BigMode bigMode;
     public SmallMode smallMode = (SmallMode)(-1);
 
@@ -32,7 +34,7 @@ public class ModeManager : MonoBehaviour
     {
         if (!bigModeDic.ContainsKey(bigMode))
         {
-            Debug.LogError("wrong mode");
+            Debug.LogError("wrong bigMode");
             return;
         }
 

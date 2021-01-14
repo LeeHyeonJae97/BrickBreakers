@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Fix
 public abstract class AMode : MonoBehaviour
 {
     public GameObject holder;

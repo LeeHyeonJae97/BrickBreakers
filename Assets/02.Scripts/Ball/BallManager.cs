@@ -56,12 +56,13 @@ public class BallManager : MonoBehaviour
         for (int i = 0; i < quantityUpCount; i++)
             Spawn(gatherPos);
 
-        power = Mathf.Clamp(power + speedUpCount, 0, 6);
+        //power = Mathf.Clamp(power + speedUpCount, 0, 6); //** 네트워크가 속도를 못따라간다
 
         idleCount = 0;
         isGatherPosSettled = false;
     }
 
+    // Fix
     public void Shoot(Vector2 dir)
     {
         StartCoroutine(CorShoot(dir));
@@ -69,6 +70,7 @@ public class BallManager : MonoBehaviour
         modeManager.SetMode(ModeManager.BigMode.GAME, ModeManager.SmallMode.SHOOT);
     }
 
+    // Fix
     public void ShootByTimeout()
     {
         float x = Random.Range(-1f, 1f);
@@ -86,6 +88,7 @@ public class BallManager : MonoBehaviour
         modeManager.SetMode(ModeManager.BigMode.GAME, ModeManager.SmallMode.SHOOT);
     }
 
+    // Fix
     private IEnumerator CorShoot(Vector2 dir)
     {
         for (int i = 0; i < balls.Count; i++)
@@ -97,7 +100,8 @@ public class BallManager : MonoBehaviour
 
     public void Spawn(Vector2 pos)
     {
-        GameObject ball = GameManager.isSinglePlay ? PoolManager.instance.Get("Ball", null, pos) : PhotonNetwork.Instantiate("Ball", pos, Quaternion.identity);
+        GameObject ball = GameManager.isSinglePlay ? PoolManager.instance.Get("Ball", null, pos) :
+            PhotonNetwork.Instantiate("Ball_Net", pos, Quaternion.identity);
         ball.SetActive(true);
         ball.GetComponent<Ball>().Initialize(this);
 
@@ -108,10 +112,9 @@ public class BallManager : MonoBehaviour
     {
         for (int i = 0; i < balls.Count; i++)
         {
-            if (GameManager.isSinglePlay) PoolManager.instance.Return("Ball", balls[i]);
-            else if (balls[i].GetComponent<PhotonView>().IsMine) PhotonNetwork.Destroy(balls[i]);
-        }
-            
+            if (GameManager.isSinglePlay) PoolManager.instance.Return(balls[i]);
+            else if (balls[i].GetComponent<PhotonView>().IsMine) PhotonNetwork.Destroy(balls[i]);            
+        }            
 
         balls.Clear();
     }

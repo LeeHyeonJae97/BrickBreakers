@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Fix
 public class Timer : MonoBehaviour
 {
     public delegate void Timeout();
@@ -14,13 +15,14 @@ public class Timer : MonoBehaviour
 
     public void StartTimer(int time)
     {
+        timer.gameObject.SetActive(true);
         this.time = time;
         InvokeRepeating(nameof(Countdown), 0, 1);        
     }
 
     public void StopTimer()
     {
-        timer.text = "";
+        timer.gameObject.SetActive(false);
         CancelInvoke(nameof(Countdown));
     }
 

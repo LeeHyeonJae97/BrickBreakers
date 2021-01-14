@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 824968979955017084}
   - component: {fileID: -6739256703602231276}
   m_Layer: 0
-  m_Name: QuantityUp
+  m_Name: QuantityUp_Net
   m_TagString: Brick
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

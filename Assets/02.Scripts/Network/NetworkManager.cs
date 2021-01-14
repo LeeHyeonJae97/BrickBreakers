@@ -6,6 +6,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 
+// Fix
 public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     public ModeManager modeManager;
@@ -32,7 +33,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     }
     public override void OnConnectedToMaster()
     {
-        Debug.Log("서버 접속");
+        //Debug.Log("서버 접속");
         PhotonNetwork.LocalPlayer.NickName = nickName.text;
 
         modeManager.SetMode(ModeManager.BigMode.LOBBY, ModeManager.SmallMode.INSERVER);
@@ -41,8 +42,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public void Disconnect() => PhotonNetwork.Disconnect();
     public override void OnDisconnected(DisconnectCause cause)
     {
-        Debug.Log("서버 접속 해제");
-        Debug.Log(cause);
+        //Debug.Log("서버 접속 해제");
+        //Debug.Log(cause);
     }
     #endregion
 
@@ -51,15 +52,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void JoinRandomRoom()
     {
-        PhotonNetwork.JoinRandomRoom();
+        modeManager.SetMode(ModeManager.BigMode.LOBBY, ModeManager.SmallMode.MAKINGMATCH);
 
-        modeManager.SetMode(ModeManager.BigMode.LOBBY, ModeManager.SmallMode.FINDINGMATCH);
+        PhotonNetwork.JoinRandomRoom();
     }
     public override void OnJoinedRoom()
     {
-        Debug.Log("방 입장");
-
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        //Debug.Log("방 입장");
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            modeManager.SetMode(ModeManager.BigMode.LOBBY, ModeManager.SmallMode.FINDINGMATCH);
+        else if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
             GameManager.isSinglePlay = false;
             modeManager.SetMode(ModeManager.BigMode.GAME, ModeManager.SmallMode.READYFORGAME);
@@ -67,8 +69,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log("방 랜덤 입장 실패");
-        Debug.Log(message);
+        //Debug.Log("방 랜덤 입장 실패");
+        //Debug.Log(message);
 
         roomId++;
         PhotonNetwork.CreateRoom(roomId.ToString(), new RoomOptions { MaxPlayers = 2 });
@@ -77,28 +79,31 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public void CreateRoom(Text text) => PhotonNetwork.CreateRoom(text.text, new RoomOptions { MaxPlayers = 2 });
     public override void OnCreatedRoom()
     {
-        Debug.Log("방 생성");
+        //Debug.Log("방 생성");
     }
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         Debug.Log("방 생성 실패");
         Debug.Log(message);
+
+        //joined = false;
+        modeManager.SetMode(ModeManager.BigMode.LOBBY, ModeManager.SmallMode.INSERVER);
     }
 
     public void LeaveRoom()
     {
-        if (PhotonNetwork.InRoom) PhotonNetwork.LeaveRoom();     
+        PhotonNetwork.LeaveRoom();
     }
     public override void OnLeftRoom()
     {
-        Debug.Log("방 퇴장");
+        //Debug.Log("방 퇴장");
 
         modeManager.SetMode(ModeManager.BigMode.LOBBY, ModeManager.SmallMode.INSERVER);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.Log("상대방 입장");
+        //Debug.Log("상대방 입장");
 
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
@@ -108,7 +113,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && modeManager.smallMode != ModeManager.SmallMode.WIN)
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1 &&
+            modeManager.smallMode != ModeManager.SmallMode.WIN && modeManager.smallMode != ModeManager.SmallMode.LOSE)
         {
             modeManager.SetMode(ModeManager.BigMode.GAME, ModeManager.SmallMode.WIN);
         }

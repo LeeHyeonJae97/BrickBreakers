@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Fix
 public class AudioManager : MonoBehaviour
 {
     [System.Serializable]
@@ -12,22 +13,22 @@ public class AudioManager : MonoBehaviour
     }
 
     public AudioSource bgmSource;
-    public AudioSource vfxSource;
+    public AudioSource sfxSource;
     public Audio[] bgms;
-    public Audio[] vfxs;
+    public Audio[] sfxs;
 
     private Dictionary<string, AudioClip> bgmDic = new Dictionary<string, AudioClip>();
-    private Dictionary<string, AudioClip> vfxDic = new Dictionary<string, AudioClip>();
+    private Dictionary<string, AudioClip> sfxDic = new Dictionary<string, AudioClip>();
 
     private void Awake()
     {
         for (int i = 0; i < bgms.Length; i++)
             bgmDic.Add(bgms[i].name, bgms[i].clip);
 
-        for (int i = 0; i < vfxs.Length; i++)
-            vfxDic.Add(vfxs[i].name, vfxs[i].clip);
+        for (int i = 0; i < sfxs.Length; i++)
+            sfxDic.Add(sfxs[i].name, sfxs[i].clip);
     }
-
+     
     public void PlayBgm(string name)
     {
         if (bgmSource.clip != bgmDic[name])
@@ -37,18 +38,18 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayVfx(string name)
+    public void PlaySfx(string name)
     {
-        if (!vfxSource.mute)
+        if (!sfxSource.mute)
         {
-            vfxSource.clip = vfxDic[name];
-            vfxSource.Play();
+            sfxSource.clip = sfxDic[name];
+            sfxSource.Play();
         }
     }
 
     public void Mute(bool isBgm, bool value)
     {
         if (isBgm) bgmSource.mute = value;
-        else vfxSource.mute = value;
+        else sfxSource.mute = value;
     }
 }

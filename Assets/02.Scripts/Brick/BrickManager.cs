@@ -52,7 +52,8 @@ public class BrickManager : MonoBehaviour
 
     private void Spawn(string key, Vector2 pos, int life)
     {
-        GameObject brick = GameManager.isSinglePlay ? PoolManager.instance.Get(key, null, pos) : PhotonNetwork.Instantiate(key, pos, Quaternion.identity);
+        GameObject brick = GameManager.isSinglePlay ? PoolManager.instance.Get(key, null, pos) :
+            PhotonNetwork.Instantiate(key + "_Net", pos, Quaternion.identity);
         brick.SetActive(true);
         brick.GetComponent<Brick>().Initialize(this, audioManager, life);
 
@@ -99,10 +100,11 @@ public class BrickManager : MonoBehaviour
     {
         DestroyCount += 1;
         bricks.Remove(brick);
-        if (GameManager.isSinglePlay) PoolManager.instance.Return(brick.name, brick);
-        else if (brick.GetComponent<PhotonView>().IsMine) PhotonNetwork.Destroy(brick);
+        if (GameManager.isSinglePlay) PoolManager.instance.Return(brick);
+        else if(brick.GetComponent<PhotonView>().IsMine) PhotonNetwork.Destroy(brick);        
     }
 
+    // Fix
     private void MoveDown(float dist)
     {
         for (int i = 0; i < bricks.Count; i++)
@@ -113,9 +115,9 @@ public class BrickManager : MonoBehaviour
     {
         for (int i = 0; i < bricks.Count; i++)
         {
-            if (GameManager.isSinglePlay) PoolManager.instance.Return(bricks[i].name, bricks[i]);
-            else if (bricks[i].GetComponent<PhotonView>().IsMine) PhotonNetwork.Destroy(bricks[i]);
-        } 
+            if (GameManager.isSinglePlay) PoolManager.instance.Return(bricks[i]);
+            else if (bricks[i].GetComponent<PhotonView>().IsMine) PhotonNetwork.Destroy(bricks[i]);            
+        }
 
         bricks.Clear();
     }

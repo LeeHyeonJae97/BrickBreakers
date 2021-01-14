@@ -17,7 +17,7 @@ public class Ball : MonoBehaviour
     private Vector2 dir;
     private float orgVelocity;
 
-    private void Start()
+    private void OnEnable()
     {
         if (GameManager.isSinglePlay || pv.IsMine)
         {
@@ -74,13 +74,14 @@ public class Ball : MonoBehaviour
         }
         this.state = state;
     }
-
+    
     public void Shoot(Vector2 dir)
     {
         this.dir = dir;
         SetState(State.FLY);
     }
 
+    // Fix
     private bool Move(Vector2 targetPos)
     {
         transform.position = Vector2.MoveTowards(transform.position, targetPos, 0.2f);
@@ -92,6 +93,7 @@ public class Ball : MonoBehaviour
         else return false;
     }
 
+    // Fix
     private void CheckVelocity()
     {
         if (rb.velocity.x != 0 && (-0.1f < rb.velocity.y && rb.velocity.y < 0.1f)) rb.velocity = new Vector2(rb.velocity.x, -0.1f);

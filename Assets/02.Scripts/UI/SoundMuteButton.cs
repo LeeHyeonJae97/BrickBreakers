@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Fix
 public class SoundMuteButton : MonoBehaviour
 {
     public AudioManager audioManager;
